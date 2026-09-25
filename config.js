@@ -1,0 +1,7 @@
+window.WEDDING_CONFIG = {
+  WEDDING_MUSIC_URL: "https://youtu.be/auQrLBUK_nk",
+  YOUTUBE_ID: "auQrLBUK_nk",
+  MP4_URL: "assets/wedding-ecard.mp4",
+  VERTICAL_MP4_URL: "assets/wedding-ecard-9x16.mp4",
+  PDF_URL: "assets/wedding-invitation.pdf",
+};
