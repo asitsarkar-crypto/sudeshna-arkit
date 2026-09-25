@@ -5,16 +5,18 @@ const story = document.querySelector("#story");
 const shots = [...document.querySelectorAll(".shot")];
 const musicDock = document.querySelector("#music-dock");
 const musicToggle = document.querySelector("#music-toggle");
+const island = document.querySelector("#island");
 const downloadPdf = document.querySelector("#download-pdf");
 const downloadMp4 = document.querySelector("#download-mp4");
 const downloadStatus = document.querySelector("#download-status");
 
-let player = null;
+const song = new Audio(config.WEDDING_SONG_FILE || "assets/wedding-song.mp3");
+song.loop = true;
+song.preload = "auto";
+
 let musicOn = false;
-let wantMusic = false;
 let shotTimer = 0;
 let shotIndex = 0;
-let playAttempts = 0;
 
 function splitLetters() {
   document.querySelectorAll("[data-letters]").forEach((node) => {
@@ -48,102 +50,44 @@ function setMusicLabel() {
   musicToggle.textContent = musicOn ? "Music on" : "Music off";
 }
 
-function startPlayer() {
-  if (!player || typeof player.playVideo !== "function") return false;
+async function playSong() {
   try {
-    player.unMute();
-    player.setVolume(90);
-    player.playVideo();
-    return true;
+    song.currentTime = 0;
+    await song.play();
+    musicOn = true;
   } catch (error) {
-    return false;
-  }
-}
-
-function playSong() {
-  wantMusic = true;
-  if (!startPlayer()) return;
-  window.setTimeout(() => {
-    const state = player && player.getPlayerState ? player.getPlayerState() : -1;
-    if (state === 1) {
-      musicOn = true;
-      setMusicLabel();
-      return;
-    }
-    if (playAttempts < 6) {
-      playAttempts += 1;
-      startPlayer();
-    }
-  }, 500);
-}
-
-function toggleSong() {
-  if (!player) return;
-  if (musicOn) {
-    player.pauseVideo();
-    wantMusic = false;
     musicOn = false;
-  } else {
-    playAttempts = 0;
-    playSong();
   }
   setMusicLabel();
 }
 
-window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
-  player = new YT.Player("yt-audio", {
-    videoId: config.YOUTUBE_ID,
-    width: 220,
-    height: 124,
-    host: "https://www.youtube-nocookie.com",
-    playerVars: {
-      autoplay: 0,
-      controls: 0,
-      disablekb: 1,
-      fs: 0,
-      modestbranding: 1,
-      playsinline: 1,
-      rel: 0,
-      loop: 1,
-      playlist: config.YOUTUBE_ID,
-    },
-    events: {
-      onReady() {
-        if (wantMusic) playSong();
-      },
-      onStateChange(event) {
-        if (event.data === YT.PlayerState.PLAYING) {
-          musicOn = true;
-          setMusicLabel();
-        }
-        if (event.data === YT.PlayerState.PAUSED && !wantMusic) {
-          musicOn = false;
-          setMusicLabel();
-        }
-        if (event.data === YT.PlayerState.ENDED) {
-          player.playVideo();
-        }
-      },
-      onError() {
-        musicOn = false;
-        setMusicLabel();
-        musicToggle.textContent = "Music unavailable";
-      },
-    },
-  });
-};
+function toggleSong() {
+  if (musicOn) {
+    song.pause();
+    musicOn = false;
+  } else {
+    song.play().then(() => {
+      musicOn = true;
+      setMusicLabel();
+    }).catch(() => {
+      musicOn = false;
+      setMusicLabel();
+    });
+    return;
+  }
+  setMusicLabel();
+}
 
 function openInvitation() {
   story.hidden = false;
-  musicDock.hidden = false;
+  if (musicDock) musicDock.hidden = false;
+  if (island) island.hidden = false;
   gate.classList.add("is-away");
-  playAttempts = 0;
   playSong();
   playFilm();
   window.setTimeout(() => {
     gate.hidden = true;
-    playSong();
-  }, 400);
+  }, 900);
 }
 
 async function downloadFile(url, filename, preparing, ready, missing) {

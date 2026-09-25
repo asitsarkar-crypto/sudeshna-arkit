@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sudeshna & Arkit wedding invitation</title>
+    <style>
+      @font-face {
+        font-family: "Tiro Bangla";
+        src: url("assets/fonts/tiro-bangla.woff2") format("woff2"),
+          url("assets/fonts/TiroBangla-Regular.ttf") format("truetype");
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Cormorant Garamond";
+        src: url("assets/fonts/cormorant-400.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Cinzel";
+        src: url("assets/fonts/cinzel-500.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Allura";
+        src: url("assets/fonts/allura-400.woff2") format("woff2");
+      }
+      @page { size: A5 portrait; margin: 0; }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: #f4ede0; }
+      body { font-family: "Cormorant Garamond", "Tiro Bangla", serif; color: #1d0604; }
+      .page {
+        position: relative;
+        width: 148mm;
+        height: 210mm;
+        overflow: hidden;
+        page-break-after: always;
+        background:
+          linear-gradient(#fbf6f0, #fbf6f0);
+      }
+      .page:last-child { page-break-after: auto; }
+      .frame {
+        position: absolute;
+        inset: 6mm;
+        border: 1.4pt solid #c7926c;
+      }
+      .frame::before {
+        position: absolute;
+        inset: 2mm;
+        border: 0.5pt solid #8d6030;
+        content: "";
+      }
+      .banarasi {
+        position: absolute;
+        right: 0;
+        left: 0;
+        height: 8mm;
+        object-fit: cover;
+      }
+      .banarasi.top { top: 0; }
+      .banarasi.bottom { bottom: 0; transform: scaleY(-1); }
+      .flora {
+        position: absolute;
+        width: 38mm;
+        opacity: 0.92;
+      }
+      .flora.tl { top: 8mm; left: 0; }
+      .flora.tr { top: 8mm; right: 0; transform: scaleX(-1); }
+      .flora.bl { bottom: 8mm; left: 0; transform: scaleY(-1); }
+      .flora.br { bottom: 8mm; right: 0; transform: scale(-1); }
+      .content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        padding: 16mm 12mm 14mm;
+        text-align: center;
+      }
+      .photo-frame {
+        width: 108mm;
+        height: 118mm;
+        padding: 2mm;
+        border: 1pt solid #c7926c;
+        background: #fff;
+      }
+      .photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 12%;
+      }
+      h1, h2, p { margin: 0; }
+      .kicker {
+        margin-top: 4mm;
+        color: #ab4a27;
+        font-family: "Tiro Bangla", serif;
+        font-size: 11pt;
+        letter-spacing: 0.08em;
+      }
+      .en-kicker {
+        font-family: "Cinzel", serif;
+        font-size: 9pt;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #ab4a27;
+      }
+      .script {
+        font-family: "Allura", cursive;
+        font-size: 34pt;
+        line-height: 0.95;
+      }
+      .bn-name {
+        font-family: "Tiro Bangla", serif;
+        font-size: 28pt;
+        line-height: 1.15;
+      }
+      .amp {
+        margin: 1mm 0;
+        color: #ab4a27;
+        font-size: 11pt;
+        letter-spacing: 0.14em;
+      }
+      .line {
+        max-width: 112mm;
+        margin-top: 2.2mm;
+        font-size: 11.5pt;
+        line-height: 1.45;
+        color: #5f2a15;
+      }
+      .bn { font-family: "Tiro Bangla", serif; }
+      .date { margin-top: 4mm; font-size: 16pt; letter-spacing: 0.06em; }
+      .venue { margin-top: 3.5mm; font-size: 16pt; }
+      .kalash { width: 18mm; margin-bottom: 2mm; }
+      .motif {
+        position: absolute;
+        bottom: 11mm;
+        width: 14mm;
+      }
+      .motif.left { left: 10mm; }
+      .motif.right { right: 10mm; }
+      .divider { width: 48mm; margin: 3mm 0; }
+    </style>
+  </head>
+  <body>
+    <section class="page">
+      <img class="banarasi top" src="assets/motif-banarasi.png" alt="" />
+      <img class="banarasi bottom" src="assets/motif-banarasi.png" alt="" />
+      <img class="flora tl" src="assets/motif-alpana.png" alt="" />
+      <img class="flora tr" src="assets/motif-alpana.png" alt="" />
+      <div class="frame"></div>
+      <div class="content">
+        <div class="photo-frame">
+          <img src="assets/couple-formal.jpeg" alt="Sudeshna and Arkit" />
+        </div>
+        <p class="kicker">শুভ বিবাহ</p>
+        <p class="script">Sudeshna</p>
+        <p class="amp bn">এবং · weds</p>
+        <p class="script">Arkit</p>
+        <p class="kicker">সুদেষ্ণা এবং আরকিত</p>
+        <p class="line">5 December 2026</p>
+        <p class="line bn">৫ ডিসেম্বর ২০২৬ · শনিবার · সন্ধ্যা ৭টা হইতে</p>
+        <p class="line">Lalita Banquet, Kolkata</p>
+      </div>
+    </section>
+
+    <section class="page">
+      <img class="banarasi top" src="assets/motif-banarasi.png" alt="" />
+      <img class="banarasi bottom" src="assets/motif-banarasi.png" alt="" />
+      <img class="flora tl" src="assets/motif-alpana.png" alt="" />
+      <img class="flora tr" src="assets/motif-alpana.png" alt="" />
+      <img class="flora bl" src="assets/motif-alpana.png" alt="" />
+      <img class="flora br" src="assets/motif-alpana.png" alt="" />
+      <div class="frame"></div>
+      <div class="content">
+        <img class="kalash" src="assets/motif-kalash.png" alt="" />
+        <p class="kicker">শুভ বিবাহ</p>
+        <h1 class="bn-name" style="font-size:16pt;margin-top:2mm">সস্নেহ নিমন্ত্রণ</h1>
+        <p class="line bn">শ্রী সুখেন দত্ত ও শ্রীমতি কৃষ্ণা দত্ত</p>
+        <p class="line bn">তাঁহাদের স্নেহের কন্যার শুভ বিবাহে</p>
+        <p class="bn-name">সুদেষ্ণা</p>
+        <p class="amp bn">এবং</p>
+        <p class="bn-name">আরকিত</p>
+        <p class="line bn">শ্রী স্বপন কুমার ভাণ্ডারী ও শ্রীমতি সীমা ভাণ্ডারী</p>
+        <p class="line bn">তাঁহাদের স্নেহের পুত্র</p>
+        <img class="divider" src="assets/floral-divider.png" alt="" />
+        <p class="date bn">৫ ডিসেম্বর ২০২৬</p>
+        <p class="line bn">শনিবার · সন্ধ্যা ৭টা হইতে</p>
+        <p class="venue bn">ললিতা ব্যাংকোয়েট</p>
+        <p class="line bn">৯৭, কেশব চন্দ্র সেন স্ট্রিট, কলকাতা ৭০০০০৯</p>
+        <p class="line bn">যোগাযোগ · ৯৮৩০৫৭৬২৪৫ · ৬২৯১৯৩৯৮৯৫</p>
+        <p class="kicker">আপনাদের আশীর্বাদই আমাদের প্রার্থনা</p>
+      </div>
+      <img class="motif left" src="assets/motif-shankha.png" alt="" />
+      <img class="motif right" src="assets/motif-topor.png" alt="" />
+    </section>
+
+    <section class="page">
+      <img class="banarasi top" src="assets/motif-banarasi.png" alt="" />
+      <img class="banarasi bottom" src="assets/motif-banarasi.png" alt="" />
+      <img class="flora tl" src="assets/motif-alpana.png" alt="" />
+      <img class="flora tr" src="assets/motif-alpana.png" alt="" />
+      <img class="flora bl" src="assets/motif-alpana.png" alt="" />
+      <img class="flora br" src="assets/motif-alpana.png" alt="" />
+      <div class="frame"></div>
+      <div class="content">
+        <img class="kalash" src="assets/motif-kalash.png" alt="" />
+        <p class="en-kicker">Wedding invitation</p>
+        <p class="line">Mr. Sukhen Dutta and Mrs. Krishna Dutta</p>
+        <p class="line">cordially request the pleasure of your gracious presence</p>
+        <p class="line">on the wedding ceremony of their daughter</p>
+        <p class="script">Sudeshna</p>
+        <p class="amp">weds</p>
+        <p class="script">Arkit</p>
+        <p class="line">son of Mr. Swapan Kumar Bhandari and Mrs. Sima Bhandari</p>
+        <img class="divider" src="assets/floral-divider.png" alt="" />
+        <p class="date">5 December 2026</p>
+        <p class="line">Saturday · 7 PM onwards</p>
+        <p class="venue">Lalita Banquet</p>
+        <p class="line">97, Keshab Chandra Sen Street, Kolkata 700009</p>
+        <p class="line">Keshab Chandra Sen Street and Amherst Street Crossing</p>
+        <p class="line">Contact · 9830576245 · 6291939895</p>
+        <p class="en-kicker" style="margin-top:4mm">With love and blessings</p>
+      </div>
+      <img class="motif left" src="assets/motif-shankha.png" alt="" />
+      <img class="motif right" src="assets/motif-topor.png" alt="" />
+    </section>
+  </body>
+</html>

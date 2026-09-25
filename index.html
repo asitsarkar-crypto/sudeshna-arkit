@@ -3,31 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#2a1b28" />
-    <title>Wedding Invitation - Sudeshna & Arkit</title>
+    <meta name="theme-color" content="#1D0604" />
+    <title>Wedding Invitation — Sudeshna & Arkit</title>
     <meta
       name="description"
       content="A digital wedding invitation celebrating Sudeshna and Arkit on Saturday, 5 December 2026 at Lalita Banquet, Kolkata."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Wedding Invitation - Sudeshna & Arkit" />
+    <meta property="og:title" content="Wedding Invitation — Sudeshna & Arkit" />
     <meta
       property="og:description"
-      content="A beautiful digital wedding invitation celebrating Sudeshna and Arkit."
+      content="Sudeshna weds Arkit. Saturday, 5 December 2026, 7 PM onwards at Lalita Banquet, Kolkata."
     />
     <link rel="canonical" href="https://sudeshna-arkit.vercel.app/" />
     <meta property="og:url" content="https://sudeshna-arkit.vercel.app/" />
-    <meta property="og:image" content="https://sudeshna-arkit.vercel.app/assets/og.jpg" />
+    <meta property="og:image" content="https://sudeshna-arkit.vercel.app/assets/og.jpg?v=3" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Sudeshna and Arkit wedding invitation, 5 December 2026" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Wedding Invitation - Sudeshna & Arkit" />
+    <meta name="twitter:title" content="Wedding Invitation — Sudeshna & Arkit" />
     <meta
       name="twitter:description"
-      content="A beautiful digital wedding invitation celebrating Sudeshna and Arkit."
+      content="Sudeshna weds Arkit. Saturday, 5 December 2026 at Lalita Banquet, Kolkata."
     />
-    <meta name="twitter:image" content="https://sudeshna-arkit.vercel.app/assets/og.jpg" />
+    <meta name="twitter:image" content="https://sudeshna-arkit.vercel.app/assets/og.jpg?v=3" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/og.jpg" />
     <link rel="preload" href="assets/couple-formal.jpeg" as="image" />
@@ -35,30 +35,68 @@
   </head>
   <body>
     <a class="skip-link" href="#downloads">Skip to downloads</a>
-
     <div class="grain" aria-hidden="true"></div>
 
+    <nav class="island" id="island" hidden>
+      <a class="island-mark" href="#story">S <i>&amp;</i> A</a>
+      <div class="island-links">
+        <a href="#film">Film</a>
+        <a href="#moments">Moments</a>
+        <a href="#invitation-bn">Invitation</a>
+        <a href="#family">Family</a>
+        <a href="#downloads">Gifts</a>
+      </div>
+    </nav>
+
     <section class="gate" id="gate" aria-label="Open the wedding invitation">
-      <div class="gate-veil" aria-hidden="true"></div>
-      <img class="gate-motif gate-shankha" src="assets/motif-shankha.png" alt="" />
-      <img class="gate-motif gate-kalash" src="assets/motif-kalash.png" alt="" />
-      <div class="gate-copy">
-        <p class="whisper">শুভ বিবাহ</p>
-        <p class="gate-line" id="gate-line-1">With love and blessings</p>
-        <p class="gate-line" id="gate-line-2">A wedding story begins</p>
-        <button class="seal" id="enter" type="button">
-          <span>Begin the film</span>
-        </button>
+      <div class="gate-shell">
+        <header class="gate-brand">
+          <span>Sudeshna &amp; Arkit</span>
+          <span>Kolkata · 2026</span>
+        </header>
+
+        <div class="gate-grid">
+          <div class="gate-copy">
+            <p class="eyebrow">শুভ বিবাহ · Wedding invitation</p>
+            <h1>Everything you need for this wedding story.</h1>
+            <p class="gate-lead">
+              A cinematic Bengali invitation for Sudeshna and Arkit — glossy portraits, family credits, and the
+              evening at Lalita Banquet, written as real typography.
+            </p>
+            <div class="gate-meta">
+              <span>5 December 2026</span>
+              <span>Saturday · 7 PM</span>
+              <span>Lalita Banquet</span>
+            </div>
+            <button class="seal" id="enter" type="button">
+              <span>Begin the film</span>
+              <i aria-hidden="true">→</i>
+            </button>
+          </div>
+
+          <figure class="hero-frame">
+            <div class="hero-bezel">
+              <img src="assets/couple-formal.jpeg" alt="Sudeshna and Arkit in a formal wedding portrait" />
+              <span class="gloss" aria-hidden="true"></span>
+            </div>
+            <figcaption>
+              <strong>Sudeshna &amp; Arkit</strong>
+              <em>সুদেষ্ণা এবং আরকিত</em>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="gate-ornaments" aria-hidden="true">
+          <img class="gate-motif gate-kalash" src="assets/motif-kalash.png" alt="" />
+          <img class="gate-motif gate-shankha" src="assets/motif-shankha.png" alt="" />
+        </div>
       </div>
     </section>
 
     <div class="music-dock" id="music-dock" hidden>
-      <div class="music-screen" aria-hidden="true">
-        <div id="yt-audio"></div>
-        <div class="music-cover">
-          <img src="assets/motif-shankha.png" alt="" />
-          <span>Wedding music</span>
-        </div>
+      <div class="music-cover">
+        <img src="assets/motif-shankha.png" alt="" />
+        <span>Tumi Amar Chirosathi</span>
       </div>
       <button class="music-toggle" id="music-toggle" type="button">Music on</button>
     </div>
@@ -179,23 +217,86 @@
         </article>
       </section>
 
+      <section class="moments" id="moments">
+        <div class="section-head">
+          <p class="eyebrow">Wedding favourites</p>
+          <h2>Made for moments that matter.</h2>
+        </div>
+        <div class="moment-grid">
+          <figure class="moment-card moment-wide">
+            <div class="photo-bezel">
+              <img src="assets/couple-formal.jpeg" alt="Formal portrait of Sudeshna and Arkit" />
+              <span class="gloss" aria-hidden="true"></span>
+            </div>
+            <figcaption>
+              <span>The couple</span>
+              <strong>A formal portrait</strong>
+              <em>দম্পতি</em>
+            </figcaption>
+          </figure>
+          <figure class="moment-card">
+            <div class="photo-bezel">
+              <img src="assets/couple-palace.jpeg" alt="Sudeshna and Arkit at Mysore Palace" />
+              <span class="gloss" aria-hidden="true"></span>
+            </div>
+            <figcaption>
+              <span>Travel</span>
+              <strong>Palace light</strong>
+              <em>ভ্রমণ</em>
+            </figcaption>
+          </figure>
+          <figure class="moment-card">
+            <div class="photo-bezel">
+              <img src="assets/couple-payana.jpeg" alt="Sudeshna and Arkit smiling together" />
+              <span class="gloss" aria-hidden="true"></span>
+            </div>
+            <figcaption>
+              <span>Together</span>
+              <strong>Payana evening</strong>
+              <em>একসাথে</em>
+            </figcaption>
+          </figure>
+          <figure class="moment-card">
+            <div class="photo-bezel">
+              <img src="assets/rings.jpeg" alt="The couple holding wedding rings" />
+              <span class="gloss" aria-hidden="true"></span>
+            </div>
+            <figcaption>
+              <span>The promise</span>
+              <strong>Rings in hand</strong>
+              <em>অঙ্গীকার</em>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
       <section class="motifs" aria-label="Bengali wedding symbols">
-        <figure>
-          <img src="assets/motif-kalash.png" alt="Wedding kalash" />
-          <figcaption>ঘট</figcaption>
-        </figure>
-        <figure>
-          <img src="assets/motif-topor.png" alt="Groom topor" />
-          <figcaption>টোপর</figcaption>
-        </figure>
-        <figure>
-          <img src="assets/motif-shankha.png" alt="Shankha" />
-          <figcaption>শঙ্খ ও উলু</figcaption>
-        </figure>
-        <figure>
-          <img src="assets/motif-alpana.png" alt="Alpana" />
-          <figcaption>আলপনা</figcaption>
-        </figure>
+        <div class="section-head">
+          <p class="eyebrow">Bengali wedding rituals</p>
+          <h2>Shop the feeling, keep the culture.</h2>
+        </div>
+        <div class="motif-row">
+          <figure>
+            <img src="assets/motif-kalash.png" alt="Wedding kalash" />
+            <figcaption>ঘট</figcaption>
+            <span>Kalash</span>
+          </figure>
+          <figure>
+            <img src="assets/motif-topor.png" alt="Groom topor" />
+            <figcaption>টোপর</figcaption>
+            <span>Topor</span>
+          </figure>
+          <figure>
+            <img src="assets/motif-shankha.png" alt="Shankha" />
+            <figcaption>শঙ্খ ও উলু</figcaption>
+            <span>Shankha</span>
+          </figure>
+          <figure>
+            <img src="assets/motif-alpana.png" alt="Alpana" />
+            <figcaption>আলপনা</figcaption>
+            <span>Alpana</span>
+          </figure>
+        </div>
       </section>
 
       <section class="card-scene" id="invitation-bn">
@@ -246,6 +347,7 @@
       </section>
 
       <section class="family" id="family">
+        <p class="eyebrow">The families</p>
         <p class="family-lead">
           Mr. Sukhen Dutta and Mrs. Krishna Dutta cordially request the pleasure of your gracious presence and blessings on the auspicious occasion of the wedding ceremony of their daughter
         </p>
@@ -269,11 +371,11 @@
 
       <section class="closing" id="downloads">
         <p class="whisper">আপনাদের আশীর্বাদই আমাদের প্রার্থনা</p>
-        <h2>Sudeshna &amp; Arkit</h2>
-        <p class="closing-line">With love and blessings</p>
+        <h2>Take a keepsake home.</h2>
+        <p class="closing-line">PDF card · MP4 film with Tumi Amar Chirosathi</p>
         <div class="download-row">
-          <button class="seal" id="download-pdf" type="button"><span>Download PDF card</span></button>
-          <button class="seal seal-solid" id="download-mp4" type="button"><span>Download MP4 film</span></button>
+          <button class="seal" id="download-pdf" type="button"><span>Download PDF card</span><i aria-hidden="true">↓</i></button>
+          <button class="seal seal-solid" id="download-mp4" type="button"><span>Download MP4 film</span><i aria-hidden="true">↓</i></button>
         </div>
         <p class="status" id="download-status" aria-live="polite"></p>
       </section>
@@ -281,6 +383,5 @@
 
     <script src="config.js"></script>
     <script src="app.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
   </body>
 </html>
