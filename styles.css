@@ -417,6 +417,7 @@ button { font: inherit; }
 .focus-faces img { object-position: center 12%; }
 .focus-pair img { object-position: center 18%; }
 .focus-hands img { object-position: center 42%; }
+.focus-venue img { object-position: center 28%; }
 
 .shot.is-on .shot-media img { animation: ken 9s var(--ease) forwards; }
 .shot.is-on .ken-left img { animation-name: ken-left; }
@@ -520,6 +521,7 @@ button { font: inherit; }
 .moments,
 .motifs,
 .card-scene,
+.venue-place,
 .family,
 .closing {
   padding: clamp(4.5rem, 9vw, 7rem) 1.25rem;
@@ -728,6 +730,104 @@ button { font: inherit; }
   text-transform: none;
 }
 
+.venue-place {
+  background: #1a0b08;
+  color: var(--ivory);
+}
+
+.venue-place .section-head h2 { color: var(--ivory); }
+
+.venue-place .eyebrow {
+  color: var(--sand);
+  border-color: rgb(199 146 108 / 0.35);
+}
+
+.venue-board {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 1.2rem;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.venue-photo {
+  margin: 0;
+  padding: 0.7rem;
+  border: 1px solid rgb(199 146 108 / 0.28);
+  border-radius: 1.6rem;
+  background: #2a120c;
+}
+
+.venue-photo img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 18%;
+  border-radius: 1.1rem;
+}
+
+.venue-photo figcaption { padding: 0.9rem 0.2rem 0.15rem; }
+
+.venue-photo span,
+.venue-pin {
+  margin: 0;
+  color: var(--sand);
+  font-family: var(--display);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.venue-photo strong,
+.venue-title {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.venue-photo em,
+.venue-bn {
+  display: block;
+  margin: 0.2rem 0 0;
+  color: var(--peach);
+  font-family: var(--bengali);
+  font-style: normal;
+}
+
+.venue-map-card {
+  overflow: hidden;
+  border: 1px solid rgb(199 146 108 / 0.28);
+  border-radius: 1.6rem;
+  background: #2a120c;
+}
+
+.venue-map-card iframe {
+  display: block;
+  width: 100%;
+  height: 22rem;
+  border: 0;
+  filter: saturate(0.86) contrast(1.04);
+}
+
+.venue-map-copy {
+  padding: 1.3rem 1.4rem 1.6rem;
+}
+
+.venue-map-copy address {
+  margin: 0.7rem 0 0;
+  color: var(--sand);
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.venue-map-copy .seal {
+  margin-top: 1.3rem;
+  text-decoration: none;
+}
+
 .family,
 .closing { text-align: center; }
 
@@ -859,7 +959,8 @@ button { font: inherit; }
   .island-links { display: none; }
   .gate-grid,
   .moment-grid,
-  .motif-row { grid-template-columns: 1fr; }
+  .motif-row,
+  .venue-board { grid-template-columns: 1fr; }
   .moment-wide { grid-row: auto; }
   .moment-wide .photo-bezel { height: auto; aspect-ratio: 4 / 5; }
 }
