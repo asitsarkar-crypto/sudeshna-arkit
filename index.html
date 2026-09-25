@@ -49,53 +49,21 @@
     </nav>
 
     <section class="gate" id="gate" aria-label="Open the wedding invitation">
-      <div class="gate-shell">
-        <header class="gate-brand">
-          <span>Sudeshna &amp; Arkit</span>
-          <span>Kolkata · 2026</span>
-        </header>
-
-        <div class="gate-grid">
-          <div class="gate-copy">
-            <p class="eyebrow">শুভ বিবাহ · Wedding invitation</p>
-            <h1>Everything you need for this wedding story.</h1>
-            <p class="gate-lead">
-              A cinematic Bengali invitation for Sudeshna and Arkit — glossy portraits, family credits, and the
-              evening at Lalita Banquet, written as real typography.
-            </p>
-            <div class="gate-meta">
-              <span>5 December 2026</span>
-              <span>Saturday · 7 PM</span>
-              <span>Lalita Banquet</span>
-            </div>
-            <button class="seal" id="enter" type="button">
-              <span>Begin the film</span>
-              <i aria-hidden="true">→</i>
-            </button>
-          </div>
-
-          <figure class="hero-frame">
-            <div class="hero-bezel">
-              <img src="assets/couple-formal.jpeg" alt="Sudeshna and Arkit in a formal wedding portrait" />
-              <span class="gloss" aria-hidden="true"></span>
-            </div>
-            <figcaption>
-              <strong>Sudeshna &amp; Arkit</strong>
-              <em>সুদেষ্ণা এবং আরকিত</em>
-            </figcaption>
-          </figure>
-        </div>
-
-        <div class="gate-ornaments" aria-hidden="true">
-          <img class="gate-motif gate-kalash" src="assets/motif-kalash.png" alt="" />
-          <img class="gate-motif gate-shankha" src="assets/motif-shankha.png" alt="" />
-        </div>
+      <div class="gate-veil" aria-hidden="true"></div>
+      <div class="gate-copy">
+        <p class="whisper">শুভ বিবাহ</p>
+        <p class="gate-line" id="gate-line-1">With love and blessings</p>
+        <p class="gate-line" id="gate-line-2">A wedding story begins</p>
+        <button class="seal" id="enter" type="button">
+          <span>Begin the film</span>
+        </button>
       </div>
     </section>
 
+    <audio id="wedding-song" src="assets/wedding-song.mp3" loop preload="auto"></audio>
+
     <div class="music-dock" id="music-dock" hidden>
       <div class="music-cover">
-        <img src="assets/motif-shankha.png" alt="" />
         <span>Tumi Amar Chirosathi</span>
       </div>
       <button class="music-toggle" id="music-toggle" type="button">Music on</button>
@@ -103,9 +71,6 @@
 
     <main id="story" hidden>
       <section class="film" id="film" aria-label="Wedding cinema">
-        <img class="film-alpana film-alpana-l" src="assets/motif-alpana.png" alt="" />
-        <img class="film-alpana film-alpana-r" src="assets/motif-alpana.png" alt="" />
-
         <article class="shot" data-duration="6500">
           <div class="shot-media focus-faces">
             <img src="assets/couple-formal.jpeg" alt="Sudeshna and Arkit in a formal portrait" />
@@ -135,7 +100,6 @@
             <span class="gloss" aria-hidden="true"></span>
           </div>
           <aside class="caption">
-            <img class="caption-motif" src="assets/motif-topor.png" alt="" />
             <p class="reveal kicker">The groom</p>
             <p class="reveal delay-1 script-line">Arkit</p>
             <p class="reveal delay-2 bn-name">বর · আরকিত</p>

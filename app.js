@@ -1,20 +1,21 @@
 const config = window.WEDDING_CONFIG;
+const MUSIC_KEY = "sudeshna-arkit-music";
 const gate = document.querySelector("#gate");
 const enter = document.querySelector("#enter");
 const story = document.querySelector("#story");
 const shots = [...document.querySelectorAll(".shot")];
 const musicDock = document.querySelector("#music-dock");
 const musicToggle = document.querySelector("#music-toggle");
-const island = document.querySelector("#island");
 const downloadPdf = document.querySelector("#download-pdf");
 const downloadMp4 = document.querySelector("#download-mp4");
 const downloadStatus = document.querySelector("#download-status");
+const song = document.querySelector("#wedding-song") || new Audio(config.WEDDING_SONG_FILE || "assets/wedding-song.mp3");
 
-const song = new Audio(config.WEDDING_SONG_FILE || "assets/wedding-song.mp3");
 song.loop = true;
 song.preload = "auto";
+song.volume = 0.9;
 
-let musicOn = false;
+let musicOn = window.localStorage.getItem(MUSIC_KEY) !== "off";
 let shotTimer = 0;
 let shotIndex = 0;
 
@@ -48,16 +49,21 @@ function playFilm() {
 
 function setMusicLabel() {
   musicToggle.textContent = musicOn ? "Music on" : "Music off";
+  musicToggle.setAttribute("aria-pressed", String(musicOn));
+}
+
+function rememberMusic() {
+  window.localStorage.setItem(MUSIC_KEY, musicOn ? "on" : "off");
 }
 
 async function playSong() {
   try {
-    song.currentTime = 0;
     await song.play();
     musicOn = true;
   } catch (error) {
     musicOn = false;
   }
+  rememberMusic();
   setMusicLabel();
 }
 
@@ -68,22 +74,28 @@ function toggleSong() {
   } else {
     song.play().then(() => {
       musicOn = true;
+      rememberMusic();
       setMusicLabel();
     }).catch(() => {
       musicOn = false;
+      rememberMusic();
       setMusicLabel();
     });
     return;
   }
+  rememberMusic();
   setMusicLabel();
 }
 
 function openInvitation() {
   story.hidden = false;
   if (musicDock) musicDock.hidden = false;
-  if (island) island.hidden = false;
   gate.classList.add("is-away");
-  playSong();
+  if (musicOn) {
+    playSong();
+  } else {
+    setMusicLabel();
+  }
   playFilm();
   window.setTimeout(() => {
     gate.hidden = true;
@@ -110,6 +122,7 @@ async function downloadFile(url, filename, preparing, ready, missing) {
 }
 
 splitLetters();
+setMusicLabel();
 enter.addEventListener("click", openInvitation);
 musicToggle.addEventListener("click", toggleSong);
 downloadPdf.addEventListener("click", () => {
