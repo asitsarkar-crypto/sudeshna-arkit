@@ -1,3 +1,4 @@
+import math
 import shutil
 import subprocess
 import tempfile
@@ -7,157 +8,141 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
-SCRIPT = ASSETS / "fonts" / "GreatVibes-Regular.ttf"
 GEORGIA = Path(r"C:\Windows\Fonts\georgia.ttf")
-NIRMALA = Path(r"C:\Windows\Fonts\nirmala.ttf")
+GEORGIA_I = Path(r"C:\Windows\Fonts\georgiai.ttf")
 MUSIC = ASSETS / "wedding-song.mp3"
 OUT_WIDE = ASSETS / "wedding-ecard.mp4"
 OUT_TALL = ASSETS / "wedding-ecard-9x16.mp4"
 VENUE_PHOTO = ASSETS / "venue-google-place.jpg"
+INK = (26, 14, 12, 236)
+IVORY = (247, 241, 232, 255)
+ROSE = (232, 196, 176, 255)
+GOLD = (199, 146, 108, 255)
 
 
 def run(cmd):
     subprocess.run(cmd, check=True)
 
 
-def load_font(path, size):
-    return ImageFont.truetype(str(path if path.exists() else GEORGIA), size)
+def font(path, size, index=0):
+    if path.exists() and path.suffix.lower() == ".ttc":
+        return ImageFont.truetype(str(path), size, index=index)
+    if path.exists():
+        return ImageFont.truetype(str(path), size)
+    return ImageFont.truetype(str(GEORGIA), size)
 
 
-def cover(image, size, top=0.16):
-    width, height = size
-    ratio = width / height
-    src = image.width / image.height
-    if src > ratio:
-        new_w = int(image.height * ratio)
-        left = (image.width - new_w) // 2
-        box = (left, 0, left + new_w, image.height)
-    else:
-        new_h = int(image.width / ratio)
-        top_px = max(0, int((image.height - new_h) * top))
-        box = (0, top_px, image.width, min(image.height, top_px + new_h))
-    return image.crop(box).resize(size, Image.Resampling.LANCZOS)
+def contain(image, size, fill=(16, 8, 6)):
+    canvas = Image.new("RGB", size, fill)
+    ratio = min(size[0] / image.width, size[1] / image.height)
+    new = image.resize((max(1, int(image.width * ratio)), max(1, int(image.height * ratio))), Image.Resampling.LANCZOS)
+    canvas.paste(new, ((size[0] - new.width) // 2, (size[1] - new.height) // 2))
+    return canvas
 
 
-def card(size, lines, photo=None):
-    width, height = size
-    if photo:
-        base = cover(Image.open(photo).convert("RGB"), size)
-        base = ImageEnhance.Contrast(base).enhance(1.06)
-        layer = Image.new("RGBA", size, (16, 10, 14, 120))
-        image = Image.alpha_composite(base.convert("RGBA"), layer)
-    else:
-        image = Image.new("RGBA", size, (33, 21, 31, 255))
-    draw = ImageDraw.Draw(image)
-    y = height * 0.52 if photo else height * 0.28
-    for text, kind in lines:
-        if kind == "script":
-            used = load_font(SCRIPT, int(height * 0.08))
-            fill = (247, 241, 246, 255)
-        elif kind == "bn":
-            used = load_font(NIRMALA, int(height * 0.032))
-            fill = (231, 195, 200, 255)
-        elif kind == "kicker":
-            used = load_font(GEORGIA, int(height * 0.026))
-            fill = (231, 195, 200, 255)
-            text = text.upper()
+def wrap_draw(draw, text, used, max_width):
+    words = text.split()
+    lines, current = [], ""
+    for word in words:
+        trial = f"{current} {word}".strip()
+        if draw.textbbox((0, 0), trial, font=used)[2] <= max_width or not current:
+            current = trial
         else:
-            used = load_font(GEORGIA, int(height * 0.036))
-            fill = (247, 241, 246, 255)
-        box = draw.textbbox((0, 0), text, font=used)
-        x = (width - (box[2] - box[0])) / 2
-        draw.text((x, y), text, font=used, fill=fill)
-        y += (box[3] - box[1]) + height * 0.02
-    return image.convert("RGB")
+            lines.append(current)
+            current = word
+    if current:
+        lines.append(current)
+    return lines or [text]
 
 
-def venue_location_card(size):
+def side_card(size, photo, lines, motif=None):
     width, height = size
-    photo = cover(Image.open(VENUE_PHOTO).convert("RGB"), size, top=0.08)
-    photo = ImageEnhance.Contrast(photo).enhance(1.08)
+    landscape = width >= height
+    image = Image.new("RGB", size, (16, 8, 6))
+    if landscape:
+        photo_box = (int(width * 0.62), height)
+        panel = (int(width * 0.62), 0, width, height)
+        text_x = int(width * 0.655)
+        text_w = int(width * 0.31)
+        text_y = int(height * 0.16)
+    else:
+        photo_box = (width, int(height * 0.62))
+        panel = (0, int(height * 0.62), width, height)
+        text_x = int(width * 0.08)
+        text_w = int(width * 0.84)
+        text_y = int(height * 0.655)
+
+    if photo:
+        fitted = contain(ImageEnhance.Contrast(Image.open(photo).convert("RGB")).enhance(1.06), photo_box)
+        image.paste(fitted, (0, 0))
+
     overlay = Image.new("RGBA", size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
-    draw.rectangle((0, 0, width, height), fill=(16, 10, 14, 70))
-    panel_top = int(height * 0.52)
-    draw.rounded_rectangle(
-        (int(width * 0.07), panel_top, int(width * 0.93), int(height * 0.94)),
-        radius=int(height * 0.02),
-        fill=(26, 14, 12, 214),
-        outline=(199, 146, 108, 180),
-        width=2,
-    )
+    draw.rectangle(panel, fill=INK)
+    if landscape:
+        draw.line((panel[0], int(height * 0.08), panel[0], int(height * 0.92)), fill=GOLD, width=2)
+    else:
+        draw.line((int(width * 0.08), panel[1], int(width * 0.92), panel[1]), fill=GOLD, width=2)
 
-    pin_x = int(width * 0.13)
-    pin_y = int(height * 0.62)
-    pin_r = int(height * 0.028)
-    draw.ellipse((pin_x - pin_r, pin_y - pin_r, pin_x + pin_r, pin_y + pin_r), fill=(196, 57, 45, 255))
-    draw.ellipse(
-        (pin_x - int(pin_r * 0.38), pin_y - int(pin_r * 0.38), pin_x + int(pin_r * 0.38), pin_y + int(pin_r * 0.38)),
-        fill=(247, 241, 246, 255),
-    )
+    if motif and Path(motif).exists():
+        mark = Image.open(motif).convert("RGBA")
+        mark.thumbnail((int(min(width, height) * 0.08), int(min(width, height) * 0.08)))
+        overlay.alpha_composite(mark, (text_x, text_y - mark.height - 12))
 
-    kicker = load_font(GEORGIA, int(height * 0.022))
-    title = load_font(GEORGIA, int(height * 0.038))
-    bn = load_font(NIRMALA, int(height * 0.034))
-    body = load_font(GEORGIA, int(height * 0.024))
-    x = int(width * 0.18)
-    y = int(height * 0.56)
-    lines = [
-        ("GOOGLE MAPS LOCATION", kicker, (231, 195, 200, 255)),
-        ("Lalita Banquet", title, (247, 241, 246, 255)),
-        ("ললিতা ভবন", bn, (231, 195, 200, 255)),
-        ("97, Keshab Chandra Sen Street", body, (247, 241, 246, 255)),
-        ("City College, College Street, Kolkata 700009", body, (247, 241, 246, 255)),
-        ("৯৭, কেশব চন্দ্র সেন স্ট্রিট, কলকাতা ৭০০০০৯", bn, (231, 195, 200, 255)),
-        ("GET DIRECTIONS  ·  দিকনির্দেশ", kicker, (199, 146, 108, 255)),
-    ]
-    for text, used, fill in lines:
-        draw.text((x, y), text, font=used, fill=fill)
-        box = draw.textbbox((0, 0), text, font=used)
-        y += (box[3] - box[1]) + int(height * 0.012)
+    y = text_y
+    for text, kind in lines:
+        if kind == "name":
+            used = font(GEORGIA_I if GEORGIA_I.exists() else GEORGIA, int(height * (0.048 if landscape else 0.036)))
+            fill = IVORY
+        elif kind == "kicker":
+            used = font(GEORGIA, int(height * 0.02))
+            fill = GOLD
+            text = text.upper()
+        else:
+            used = font(GEORGIA, int(height * (0.026 if landscape else 0.022)))
+            fill = IVORY
+        for part in wrap_draw(draw, text, used, text_w):
+            draw.text((text_x, y), part, font=used, fill=fill)
+            box = draw.textbbox((0, 0), part, font=used)
+            y += (box[3] - box[1]) + int(height * 0.012)
+        y += int(height * 0.012)
 
-    composed = Image.alpha_composite(photo.convert("RGBA"), overlay)
-    return composed.convert("RGB")
+    return Image.alpha_composite(image.convert("RGBA"), overlay).convert("RGB")
 
 
-def scene_clip(image_path, seconds, size, output):
-    width, height = size
+def song_seconds():
+    probe = subprocess.check_output(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", str(MUSIC)],
+        text=True,
+    ).strip()
+    return float(probe)
+
+
+def scene_clip(image_path, seconds, output):
+    fade_out = max(seconds - 0.55, 0.2)
     run([
         "ffmpeg", "-y", "-loop", "1", "-i", str(image_path),
-        "-vf",
-        f"scale={width}:{height}:force_original_aspect_ratio=increase,crop={width}:{height},"
-        f"zoompan=z='min(zoom+0.0007,1.1)':d={seconds * 30}:s={width}x{height}:fps=30,format=yuv420p",
-        "-t", str(seconds), "-an", str(output),
+        "-vf", f"fade=t=in:st=0:d=0.45,fade=t=out:st={fade_out}:d=0.45,format=yuv420p",
+        "-t", str(seconds), "-r", "30", "-an", str(output),
     ])
 
 
-def concat(clips, durations, output):
-    inputs = []
-    filters = []
-    for index, clip in enumerate(clips):
-        fade_out = max(durations[index] - 0.7, 0.1)
-        inputs += ["-i", str(clip)]
-        filters.append(f"[{index}:v]fade=t=in:st=0:d=0.6,fade=t=out:st={fade_out}:d=0.6[v{index}]")
-    chain = "".join(f"[v{i}]" for i in range(len(clips)))
-    filters.append(f"{chain}concat=n={len(clips)}:v=1:a=0[v]")
-    run(["ffmpeg", "-y", *inputs, "-filter_complex", ";".join(filters), "-map", "[v]", "-r", "30", str(output)])
+def concat(clips, output):
+    listing = output.with_suffix(".txt")
+    listing.write_text("".join(f"file '{clip.as_posix()}'\n" for clip in clips), encoding="utf-8")
+    run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(listing), "-c", "copy", str(output)])
 
 
-def add_audio(video, output):
-    if MUSIC.exists():
-        run([
-            "ffmpeg", "-y", "-i", str(video), "-i", str(MUSIC),
-            "-c:v", "libx264", "-pix_fmt", "yuv420p",
-            "-c:a", "aac", "-b:a", "192k",
-            "-shortest", "-movflags", "+faststart", str(output),
-        ])
-    else:
-        run([
-            "ffmpeg", "-y", "-i", str(video),
-            "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
-            "-c:v", "libx264", "-pix_fmt", "yuv420p",
-            "-c:a", "aac", "-shortest", "-movflags", "+faststart", str(output),
-        ])
+def mux_looped(video, output):
+    run([
+        "ffmpeg", "-y",
+        "-stream_loop", "-1", "-i", str(video),
+        "-i", str(MUSIC),
+        "-c:v", "libx264", "-pix_fmt", "yuv420p",
+        "-c:a", "aac", "-b:a", "192k",
+        "-shortest", "-movflags", "+faststart",
+        str(output),
+    ])
 
 
 def scenes():
@@ -165,46 +150,110 @@ def scenes():
     rings = ASSETS / "rings.jpeg"
     palace = ASSETS / "couple-palace.jpeg"
     payana = ASSETS / "couple-payana.jpeg"
+    venue = VENUE_PHOTO
+    sindur = ASSETS / "ritual-sindur.jpg"
+    varmala = ASSETS / "ritual-varmala.jpg"
+    kalash = ASSETS / "motif-kalash.png"
+    shankha = ASSETS / "motif-shankha.png"
+    topor = ASSETS / "motif-topor.png"
     return [
-        (formal, [("শুভ বিবাহ", "bn"), ("A wedding story", "line")], 5),
-        (formal, [("The bride", "kicker"), ("Sudeshna", "script"), ("সুদেষ্ণা", "bn")], 6),
-        (formal, [("The groom", "kicker"), ("Arkit", "script"), ("অর্কিত", "bn")], 6),
-        (rings, [("Parents of the bride", "kicker"), ("Mr. Sukhen Dutta", "line"), ("Mrs. Krishna Dutta", "line"), ("শ্রী সুখেন দত্ত ও শ্রীমতি কৃষ্ণা দত্ত", "bn")], 7),
-        (palace, [("Parents of the groom", "kicker"), ("Mr. Swapan Kumar Bhandari", "line"), ("Mrs. Sima Bhandari", "line"), ("শ্রী স্বপন কুমার ভাণ্ডারী ও শ্রীমতি সীমা ভাণ্ডারী", "bn")], 7),
-        (rings, [("সস্নেহ নিমন্ত্রণ", "bn"), ("সুদেষ্ণা এবং অর্কিত", "bn"), ("৫ ডিসেম্বর ২০২৬ · শনিবার", "bn"), ("সন্ধ্যা ৭টা হইতে", "bn")], 7),
-        (payana, [("Together", "kicker"), ("Sudeshna weds Arkit", "script"), ("5 December 2026, Saturday", "line"), ("7 PM onwards", "kicker")], 7),
-        ("venue", None, 8),
-        (formal, [("Sudeshna & Arkit", "script"), ("With love and blessings", "kicker")], 6),
+        (formal, kalash, [
+            ("A wedding film", "kicker"),
+            ("Sudeshna & Arkit", "name"),
+            ("Saturday · 5 December 2026", "line"),
+        ], 7),
+        (formal, None, [
+            ("The bride", "kicker"),
+            ("Sudeshna", "name"),
+        ], 7),
+        (formal, topor, [
+            ("The groom", "kicker"),
+            ("Arkit", "name"),
+        ], 7),
+        (rings, None, [
+            ("Parents of the bride", "kicker"),
+            ("Mr. Sukhen Dutta", "line"),
+            ("Mrs. Krishna Dutta", "line"),
+        ], 8),
+        (palace, None, [
+            ("Parents of the groom", "kicker"),
+            ("Mr. Swapan Kumar Bhandari", "line"),
+            ("Mrs. Sima Bhandari", "line"),
+        ], 8),
+        (rings, kalash, [
+            ("With love", "kicker"),
+            ("You are invited", "name"),
+            ("Saturday · 5 December 2026", "line"),
+            ("7 PM onwards", "line"),
+        ], 8),
+        (payana, None, [
+            ("Together", "kicker"),
+            ("Sudeshna weds Arkit", "name"),
+        ], 7),
+        (venue, shankha, [
+            ("The wedding place", "kicker"),
+            ("Lalita Banquet", "name"),
+            ("97, Keshab Chandra Sen Street", "line"),
+            ("Kolkata 700009", "line"),
+        ], 8),
+        (sindur, None, [
+            ("Sindur daan", "kicker"),
+            ("The sacred vermilion", "line"),
+        ], 8),
+        (varmala, None, [
+            ("Varmala", "kicker"),
+            ("Exchange of garlands", "line"),
+        ], 8),
+        (formal, kalash, [
+            ("A blessing", "kicker"),
+            ("May these two lives", "line"),
+            ("be blessed", "line"),
+        ], 8),
+        (payana, shankha, [
+            ("With love", "kicker"),
+            ("We seek your blessings", "line"),
+        ], 8),
+        (formal, kalash, [
+            ("Sudeshna & Arkit", "name"),
+            ("With love and blessings", "line"),
+        ], 7),
     ]
 
 
 def render(size, output):
     work = Path(tempfile.mkdtemp(prefix="wedding-ecard-"))
-    items = scenes()
     clips = []
-    durations = []
-    for index, (photo, lines, seconds) in enumerate(items):
+    for index, (photo, motif, lines, seconds) in enumerate(scenes()):
         frame = work / f"frame-{index:02d}.jpg"
         clip = work / f"clip-{index:02d}.mp4"
-        if photo == "venue":
-            venue_location_card(size).save(frame, quality=93)
-        else:
-            card(size, lines, photo).save(frame, quality=93)
-        scene_clip(frame, seconds, size, clip)
+        side_card(size, photo, lines, motif).save(frame, quality=94)
+        scene_clip(frame, seconds, clip)
         clips.append(clip)
-        durations.append(seconds)
     silent = work / "silent.mp4"
-    concat(clips, durations, silent)
-    add_audio(silent, output)
+    concat(clips, silent)
+    mux_looped(silent, output)
     shutil.rmtree(work, ignore_errors=True)
     print(f"wrote {output}")
+
+
+def write_qc_frames():
+    qa = ASSETS / "qa-frames"
+    qa.mkdir(exist_ok=True)
+    for index, (photo, motif, lines, _seconds) in enumerate(scenes()):
+        path = qa / f"slide-{index:02d}.jpg"
+        side_card((1920, 1080), photo, lines, motif).save(path, quality=92)
+        print(f"wrote {path}")
 
 
 def main():
     if not VENUE_PHOTO.exists():
         raise SystemExit(f"missing venue photo {VENUE_PHOTO}")
+    if "--qc" in __import__("sys").argv:
+        write_qc_frames()
+        return
     render((1920, 1080), OUT_WIDE)
     render((1080, 1920), OUT_TALL)
+    print("song seconds", song_seconds())
 
 
 if __name__ == "__main__":
